@@ -13,6 +13,12 @@ class BodySectionWithMarginBottom extends Component {
 	}
 }
 
+const styles = StyleSheet.create({
+  bodySectionWithMargin: {
+    marginBottom: "40",
+  },
+});
+
 BodySectionWithMarginBottom.propTypes = {
 	title: PropTypes.string.isRequired,
 	children: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
