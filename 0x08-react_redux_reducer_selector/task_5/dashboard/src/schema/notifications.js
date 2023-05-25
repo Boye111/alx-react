@@ -1,33 +1,35 @@
-import * as notificationItem from "../../notifications.json";
+import * as notificationsData from '../../notifications.json';
 import { normalize, schema } from 'normalizr';
 
-// Define a users schema
-const user = new schema.Entity('users');
-
-// Define a message schema
-const message = new schema.Entity('messages', {}, {
-  idAttribute: 'guid'
-});
-
-// Define a notification schema
-const notification = new schema.Entity('notifications', {
-  author: user,
-  context: message
-});
-
-export const normalizedData = normalize(notificationItem.default, [notification])
-
 export const getAllNotificationsByUser = (userId) => {
+  const notifications = normalized.entities.notifications;
+  const messages = normalized.entities.messages;
+  const notificationsByUser = [];
 
-  const entityNotification = normalizedData.entities.notifications;
-  const entityMessage = normalizedData.entities.messages;
-  const data = [];
-
-  for (let item in entityNotification) {
-    if (entityNotification[item].author === userId) {
-      const contextMessage = entityNotification[item].context;
-      data.push(entityMessage[contextMessage])
+  for (const property in notifications) {
+    if (notifications[property].author === userId) {
+      notificationsByUser.push(messages[notifications[property].context]);
     }
   }
-  return data;
+
+  return notificationsByUser;
 };
+
+const user = new schema.Entity('users');
+
+const message = new schema.Entity(
+  'messages',
+  {},
+  {
+    idAttribute: 'guid',
+  }
+);
+
+const notification = new schema.Entity('notifications', {
+  author: user,
+  context: message,
+});
+
+const normalized = normalize(notificationsData.default, [notification]);
+
+export { normalized };
